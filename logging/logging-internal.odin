@@ -23,16 +23,6 @@ LOG_LEVEL_DEBUG:   u8 : 4
 
 log_level: u8 = 0
 
-create_dir_if_not_exists :: proc(path: string, dir_name_comment: string) {
-    if !(os.exists(path)) {
-        info_console_only(fmt.tprint(dir_name_comment, "does not exist, creating:", path))
-        errno: os.Errno = os.make_directory(path)
-        if errno != 0 {
-            error_console_only("Failed to create directory - error code:", errno)
-        }
-    }
-}
-
 @(private="file")
 log_line :: proc(prefix: string, elements: ..any) -> (line: string) {
     line = fmt.tprintf("[%s]%s ", timestamp.time_display(), prefix)

@@ -8,6 +8,7 @@ import "core:fmt"
 import "core:os"
 import "core:path/filepath"
 
+import "../system"
 import "../timestamp"
 
 FileHandle :: distinct os.Handle
@@ -15,12 +16,19 @@ FileHandle :: distinct os.Handle
 open_file :: proc(program_name: string, program_version: string) -> FileHandle {
 
     current_dir: string = os.get_current_directory()
+    syserrno: Maybe(int)
 
     logs_dir: string = filepath.join({current_dir, "logs"})
-    create_dir_if_not_exists(logs_dir, "Logs dir")
+    syserrno = system.create_dir_if_not_exists(logs_dir, "Logs dir")
+    if syserrno != nil {
+        error_console_only("Failed to create directory - error code:", syserrno)
+    }
 
     logs_subdir_today: string = filepath.join({logs_dir, timestamp.date()})
-    create_dir_if_not_exists(logs_subdir_today, "Logs subdir for today")
+    syserrno = system.create_dir_if_not_exists(logs_subdir_today, "Logs subdir for today")
+    if syserrno != nil {
+        error_console_only("Failed to create directory - error code:", syserrno)
+    }
 
     filename: string =  fmt.tprintf("%s-v%s-t-%s.log", program_name, program_version, timestamp.time())
     path: string = filepath.join({logs_subdir_today, filename})
