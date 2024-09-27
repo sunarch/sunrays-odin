@@ -7,12 +7,15 @@ package system
 import "core:fmt"
 import "core:os"
 
-create_dir_if_not_exists :: proc(path: string, dir_name_comment: string) -> Maybe(int) {
+create_dir_if_not_exists :: proc(path: string, dir_name_comment: string) -> Maybe(string) {
     if os.exists(path) do return nil
 
     fmt.println("[SR:SYSTEM]", dir_name_comment, "does not exist, creating:", path)
-    errno: os.Errno = os.make_directory(path)
-    if errno == 0 do return nil
+    err: os.Error = os.make_directory(path)
 
-    return int(errno)
+    if err == nil {
+        return nil
+    } else {
+        return os.error_string(err)
+    }
 }

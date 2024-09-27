@@ -19,9 +19,9 @@ DIR_NAME: string : "screenshots"
 take :: proc(fh_log: logging.FileHandle, program_name: string, program_version: string) {
     current_dir: string = os.get_current_directory()
     screenshots_dir: string = filepath.join({current_dir, "screenshots"})
-    syserrno: Maybe(int) = system.create_dir_if_not_exists(screenshots_dir, "Screenshots dir")
-    if syserrno != nil {
-        logging.error_console_only("Failed to create directory - error code: ", syserrno)
+    err_string: Maybe(string) = system.create_dir_if_not_exists(screenshots_dir, "Screenshots dir")
+    if err_string != nil {
+        logging.error_console_only("Failed to create directory - error code: ", err_string)
     }
 
     timestamp: string = timestamp.full()
