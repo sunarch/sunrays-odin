@@ -7,7 +7,8 @@ package random
 import "core:math/rand"
 
 init :: proc() {
-    rand.init(&rng, seed)
+    rng_state = { seed, 1 }
+    rng = rand.default_random_generator(&rng_state)
 }
 
 init_with_seed :: proc(custom_seed: u64) {

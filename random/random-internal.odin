@@ -9,4 +9,6 @@ import "core:math/rand"
 
 seed: u64 = generate_seed()
 
-rng: rand.Rand
+rng_state: rand.Default_Random_State
+
+rng: rand.Generator
